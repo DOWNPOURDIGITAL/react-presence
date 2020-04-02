@@ -1,0 +1,37 @@
+{
+	"name": "@downpourdigital/react-presence",
+	"version": "0.0.0",
+	"description": "Callback based presence wrapper for (un)mount animations",
+	"sideEffects": false,
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
+	"repository": "git@github.com:DOWNPOURDIGITAL/react-presence.git",
+	"author": "johh <code@johh.net>",
+	"license": "BSD-4-Clause",
+	"private": false,
+	"scripts": {
+		"build": "rollup -c",
+		"declaration": "tsc --emitDeclarationOnly",
+		"type-check": "tsc --noEmit",
+		"dev": "rollup -c -w"
+	},
+	"devDependencies": {
+		"@types/react": "^16.9.31",
+		"@typescript-eslint/eslint-plugin": "^2.26.0",
+		"@typescript-eslint/parser": "^2.26.0",
+		"eslint": "^6.8.0",
+		"eslint-config-airbnb-typescript": "^7.2.0",
+		"eslint-import-resolver-typescript": "^2.0.0",
+		"eslint-plugin-import": "^2.20.2",
+		"eslint-plugin-jsx-a11y": "^6.2.3",
+		"eslint-plugin-react": "^7.19.0",
+		"eslint-plugin-react-hooks": "^2.5.0",
+		"rollup": "^2.3.2",
+		"rollup-plugin-typescript2": "^0.27.0",
+		"typescript": "^3.8.3"
+	},
+	"dependencies": {
+		"@downpourdigital/dispatcher": ">=0.0.3",
+		"react": ">=16.x.x"
+	}
+}
