@@ -30,8 +30,10 @@
 		"rollup-plugin-typescript2": "^0.27.0",
 		"typescript": "^3.8.3"
 	},
+	"peerDependencies": {
+		"react": ">=16"
+	},
 	"dependencies": {
-		"@downpourdigital/dispatcher": ">=0.0.3",
-		"react": ">=16.x.x"
+		"@downpourdigital/dispatcher": ">=0.0.3"
 	}
 }
