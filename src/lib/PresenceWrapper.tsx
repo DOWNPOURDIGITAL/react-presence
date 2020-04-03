@@ -16,7 +16,7 @@ interface PresenceWrapperProps {
 
 
 const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({ children, visible }) => {
-	const [mounted, setMounted] = useState( visible );
+	const [mounted, setMounted] = useState( false );
 	const ctx = useContext( PresenceContext );
 	const controller = useMemo( () => new PresenceController(), []);
 
@@ -37,7 +37,13 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({ children, vi
 		return (): void => {};
 	}, []);
 
-	if ( visible && !controller.isMounted ) {
+	useEffect( () => {
+		if ( visible && !mounted ) {
+			setMounted( true );
+		}
+	}, [visible, mounted]);
+
+	if ( visible && !controller.isMounted && mounted ) {
 		controller.mount( () => {});
 	} else if ( !visible && controller.isMounted ) {
 		controller.unmount( () => setMounted( false ) );
@@ -48,7 +54,7 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({ children, vi
 			subscribe: ( o: PresenceObserver ) => controller.subscribe( o ),
 		}}
 		>
-			{mounted && children}
+			{( mounted || visible ) && children}
 		</PresenceContext.Provider>
 	);
 };
