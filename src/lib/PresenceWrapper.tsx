@@ -5,6 +5,7 @@ import React, {
 	useMemo,
 	useEffect,
 } from 'react';
+
 import PresenceController from './PresenceController';
 import PresenceContext from './PresenceContext';
 import PresenceObserver from './PresenceObserver';

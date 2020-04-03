@@ -1,4 +1,5 @@
 import { EventDispatcher } from '@downpourdigital/dispatcher';
+
 import PresenceObserver from './PresenceObserver';
 
 
