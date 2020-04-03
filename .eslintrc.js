@@ -17,7 +17,6 @@ module.exports = {
 	plugins: [
 		"@typescript-eslint/eslint-plugin",
 		"import",
-		/* "@typescript-eslint/tslint" */
 	],
 	overrides: [
 		{
@@ -32,9 +31,8 @@ module.exports = {
 			"@typescript-eslint/parser": [".ts", ".tsx"],
 		},
 		"import/resolver": {
-			// use <root>/tsconfig.json
 			typescript: {
-				alwaysTryTypes: true, // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+				alwaysTryTypes: true,
 			},
 		},
 	},
@@ -86,7 +84,6 @@ module.exports = {
 				},
 			},
 		],
-		/* "@typescript-eslint/no-param-reassign": "error", */
 		"@typescript-eslint/no-this-alias": "error",
 		"@typescript-eslint/quotes": [
 			"error",
@@ -106,7 +103,6 @@ module.exports = {
 		"id-blacklist": [
 			"error",
 			"any",
-			/* "Number", */
 			"number",
 			"String",
 			"string",
@@ -148,77 +144,5 @@ module.exports = {
 			},
 		],
 		"spaced-comment": "error",
-		/* "@typescript-eslint/tslint/config": [
-            "error",
-            {
-                "rules": {
-                    "array-bracket-spacing": [
-                        true,
-                        "never"
-                    ],
-                    "block-spacing": true,
-                    "brace-style": [
-                        true,
-                        "1tbs",
-                        {
-                            "allowSingleLine": true
-                        }
-                    ],
-                    "function-name": [
-                        true,
-                        {
-                            "method-regex": "^[a-z][\\w\\d]+$",
-                            "private-method-regex": "^[a-z][\\w\\d]+$",
-                            "protected-method-regex": "^[a-z][\\w\\d]+$",
-                            "static-method-regex": "^[A-Z_\\d]+$",
-                            "function-regex": "^[a-zA-Z][\\w\\d]+$"
-                        }
-                    ],
-                    "no-boolean-literal-compare": true,
-                    "no-else-after-return": true,
-                    "no-function-constructor-with-string-args": true,
-                    "no-increment-decrement": true,
-                    "object-curly-spacing": [
-                        true,
-                        "always"
-                    ],
-                    "object-shorthand-properties-first": true,
-                    "prefer-array-literal": true,
-                    "space-in-parens": [
-                        true,
-                        "always",
-                        {
-                            "exceptions": [
-                                "{}",
-                                "[]"
-                            ]
-                        }
-                    ],
-                    "ter-arrow-parens": [
-                        true,
-                        "as-needed",
-                        {
-                            "requireForBlockBody": true
-                        }
-                    ],
-                    "ter-computed-property-spacing": true,
-                    "ter-func-call-spacing": true,
-                    "ter-indent": [
-                        true,
-                        "tab",
-                        4
-                    ],
-                    "ter-prefer-arrow-callback": true,
-                    "whitespace": [
-                        true,
-                        "check-branch",
-                        "check-decl",
-                        "check-operator",
-                        "check-preblock",
-                        "check-separator"
-                    ]
-                }
-            }
-        ] */
 	},
 }
