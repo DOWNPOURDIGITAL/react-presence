@@ -37,6 +37,9 @@ export default class PresenceController {
 		const mountSub = this.mountTrigger.subscribe( observer.in );
 		const unmountSub = this.unmountTrigger.subscribe( observer.out );
 
+		// run in function if observer is late to the party
+		if ( this.isMounted ) observer.in( () => {});
+
 		return (): void => {
 			mountSub.unsubscribe();
 			unmountSub.unsubscribe();
