@@ -1,4 +1,4 @@
-import { Observer } from '@downpourdigital/dispatcher/dist/lib/Subscription';
+import { Observer } from '@downpourdigital/dispatcher/dist/cjs/lib/Subscription';
 
 
 export default interface PresenceObserver {

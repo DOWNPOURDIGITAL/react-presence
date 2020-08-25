@@ -38,10 +38,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@downpourdigital/dispatcher@>=0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@downpourdigital/dispatcher/-/dispatcher-0.0.3.tgz#7226b2f6605b93cddaa50e7d6ff94f570499c2c7"
-  integrity sha512-6Z00go9kvkukXInRC9XsYd/zdrkbzalJCLoSApbZ7K25qegn4ruHAnKhOEcHLvMciRjeicTvH1+D2GT1K1YXqw==
+"@downpourdigital/dispatcher@>=0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@downpourdigital/dispatcher/-/dispatcher-0.1.0.tgz#9e2a0012d8675c32e6b8ae2615ba1845ae831f2f"
+  integrity sha512-SP9mnllEco9+HTjwqxAnKK3+KwP/xx/NTEz60EziqiFVaFXraeQtE33bq7VMkolU5bKjQiuGwkNsz3LwqAvzAw==
 
 "@rollup/pluginutils@^3.0.8":
   version "3.0.8"

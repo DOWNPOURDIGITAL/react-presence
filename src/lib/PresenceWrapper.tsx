@@ -52,7 +52,9 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({ children, vi
 
 	return (
 		<PresenceContext.Provider value={{
-			subscribe: ( o: PresenceObserver ) => controller.subscribe( o ),
+			subscribe: ( o: PresenceObserver ): () => void => (
+				controller.subscribe( o )
+			),
 		}}
 		>
 			{( mounted || visible ) && children}

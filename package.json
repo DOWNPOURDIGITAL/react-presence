@@ -34,6 +34,6 @@
 		"react": ">=16"
 	},
 	"dependencies": {
-		"@downpourdigital/dispatcher": ">=0.0.3"
+		"@downpourdigital/dispatcher": ">=0.1.0"
 	}
 }
