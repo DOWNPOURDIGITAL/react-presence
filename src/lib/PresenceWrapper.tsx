@@ -4,6 +4,7 @@ import React, {
 	useContext,
 	useMemo,
 	useEffect,
+	useRef,
 } from 'react';
 
 import PresenceController from './PresenceController';
@@ -16,19 +17,27 @@ interface PresenceWrapperProps {
 }
 
 
-const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({ children, visible }) => {
-	const [mounted, setMounted] = useState( false );
+const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
+	children,
+	visible: localVisible,
+}) => {
 	const ctx = useContext( PresenceContext );
+	const parentVisible = useRef( !ctx.subscribe );
+	const [mounted, setMounted] = useState( false );
 	const controller = useMemo( () => new PresenceController(), []);
+
+	const visible = localVisible && parentVisible.current;
 
 	useEffect( () => {
 		if ( ctx.subscribe ) {
 			const unsubscribe = ctx.subscribe({
 				in: cb => {
+					parentVisible.current = true;
 					controller.mount( cb );
 					return (): void => {};
 				},
 				out: cb => {
+					parentVisible.current = false;
 					controller.unmount( cb );
 					return (): void => {};
 				},
