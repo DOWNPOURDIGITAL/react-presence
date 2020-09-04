@@ -22,7 +22,7 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 	visible: localVisible,
 }) => {
 	const ctx = useContext( PresenceContext );
-	const parentVisible = useRef( !ctx.subscribe );
+	const parentVisible = useRef( ctx.visible );
 	const [mounted, setMounted] = useState( false );
 	const controller = useMemo( () => new PresenceController(), []);
 
@@ -64,6 +64,7 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 			subscribe: ( o: PresenceObserver ): () => void => (
 				controller.subscribe( o )
 			),
+			visible,
 		}}
 		>
 			{( mounted || visible ) && children}
