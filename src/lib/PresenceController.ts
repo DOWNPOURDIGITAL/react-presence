@@ -35,15 +35,23 @@ export default class PresenceController {
 
 
 	public subscribe( observer: PresenceObserver ): () => void {
-		const mountSub = this.mountTrigger.subscribe( observer.in );
-		const unmountSub = this.unmountTrigger.subscribe( observer.out );
+		let mountSub: Subscription<void>;
+		let unmountSub: Subscription<void>;
+
+		if ( observer.in ) {
+			mountSub = this.mountTrigger.subscribe( observer.in );
+		}
+
+		if ( observer.out ) {
+			unmountSub = this.unmountTrigger.subscribe( observer.out );
+		}
 
 		// run in function if observer is late to the party
 		if ( this.isMounted ) observer.in( () => {});
 
 		return (): void => {
-			mountSub.unsubscribe();
-			unmountSub.unsubscribe();
+			if ( mountSub ) mountSub.unsubscribe();
+			if ( unmountSub ) unmountSub.unsubscribe();
 		};
 	}
 
