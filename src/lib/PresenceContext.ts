@@ -1,10 +1,11 @@
 import { createContext } from 'react';
 
-import PresenceObserver from './PresenceObserver';
+import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 
 
 interface PresenceContextProps {
 	subscribe?: ( observer: PresenceObserver ) => () => void;
+	subscribePassive?: ( observer: PassivePresenceObserver ) => () => void;
 	visible: boolean;
 }
 

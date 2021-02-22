@@ -9,7 +9,7 @@ import React, {
 
 import PresenceController from './PresenceController';
 import PresenceContext from './PresenceContext';
-import PresenceObserver from './PresenceObserver';
+import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 
 
 interface PresenceWrapperProps {
@@ -63,6 +63,9 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 		<PresenceContext.Provider value={{
 			subscribe: ( o: PresenceObserver ): () => void => (
 				controller.subscribe( o )
+			),
+			subscribePassive: ( o: PassivePresenceObserver ): () => void => (
+				controller.subscribePassive( o )
 			),
 			visible,
 		}}

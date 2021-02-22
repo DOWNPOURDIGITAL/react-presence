@@ -5,3 +5,6 @@ export default interface PresenceObserver {
 	in: Observer<void>;
 	out: Observer<void>;
 }
+
+
+export type PassivePresenceObserver = () => ( () => void ) | void;

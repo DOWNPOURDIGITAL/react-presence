@@ -71,3 +71,24 @@ const ChildWithAnimation = () => {
 };
 
 ```
+```typescript
+// ChildWithEffect.tsx
+
+import React from 'react';
+import { usePresenceEffect } from '@downpourdigital/react-presence';
+
+
+const ChildWithEffect = () => {
+	usePresenceEffect( () => {
+		console.log( 'runs when IN anims start' );
+		return () => {
+			console.log( 'runs when OUT anims start' );
+		};
+	}, []);
+
+	return (
+		<h1>Hello world</h1>
+	);
+};
+
+```

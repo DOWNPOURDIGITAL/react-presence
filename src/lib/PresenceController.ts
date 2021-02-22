@@ -1,6 +1,7 @@
 import { EventDispatcher } from '@downpourdigital/dispatcher';
+import PassiveSubscription from '@downpourdigital/dispatcher/dist/cjs/lib/PassiveSubscription';
 
-import PresenceObserver from './PresenceObserver';
+import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 
 
 export default class PresenceController {
@@ -43,6 +44,36 @@ export default class PresenceController {
 		return (): void => {
 			mountSub.unsubscribe();
 			unmountSub.unsubscribe();
+		};
+	}
+
+
+	public subscribePassive( observer: PassivePresenceObserver ): () => void {
+		let unmountSub: PassiveSubscription<void>;
+		const inObserver = (): void => {
+			const outObserver = observer();
+
+			if ( unmountSub ) {
+				// inObserver ran before. clear old out subscription before overwriting.
+				unmountSub.unsubscribe();
+				unmountSub = null;
+			}
+
+			if ( outObserver ) {
+				unmountSub = this.unmountTrigger.subscribePassive( () => {
+					outObserver();
+				});
+			}
+		};
+
+		const mountSub = this.mountTrigger.subscribePassive( inObserver );
+
+		// run in function if observer is late to the party
+		if ( this.isMounted ) inObserver();
+
+		return (): void => {
+			mountSub.unsubscribe();
+			if ( unmountSub ) unmountSub.unsubscribe();
 		};
 	}
 }
