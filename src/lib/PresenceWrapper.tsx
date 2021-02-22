@@ -2,7 +2,6 @@ import React, {
 	FunctionComponent,
 	useState,
 	useContext,
-	useMemo,
 	useEffect,
 	useRef,
 } from 'react';
@@ -10,6 +9,7 @@ import React, {
 import PresenceController from './PresenceController';
 import PresenceContext from './PresenceContext';
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
+import useConstant from './useConstant';
 
 
 interface PresenceWrapperProps {
@@ -24,7 +24,7 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 	const ctx = useContext( PresenceContext );
 	const parentVisible = useRef( ctx.visible );
 	const [mounted, setMounted] = useState( false );
-	const controller = useMemo( () => new PresenceController(), []);
+	const controller = useConstant( () => new PresenceController() );
 
 	const visible = localVisible && parentVisible.current;
 

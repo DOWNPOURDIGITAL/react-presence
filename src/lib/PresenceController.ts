@@ -1,5 +1,6 @@
 import { EventDispatcher } from '@downpourdigital/dispatcher';
 import PassiveSubscription from '@downpourdigital/dispatcher/dist/cjs/lib/PassiveSubscription';
+import Subscription from '@downpourdigital/dispatcher/dist/cjs/lib/Subscription';
 
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 
@@ -13,23 +14,36 @@ export default class PresenceController {
 		mayCancelAfterCallback: false,
 	});
 
+	private lateInObserverCancelFuncs: ( () => void )[] = [];
+	private inTimeout: number;
+
 	public isMounted = false;
 
 
 	public mount( cb: Function ): void {
-		this.isMounted = true;
 		this.unmountTrigger.cancelAll();
-		const e = this.mountTrigger.dispatch();
 
-		e.promise.then( () => cb() ).catch( () => { });
+		// wait for all observers to subscribe
+		this.inTimeout = setTimeout( () => {
+			this.isMounted = true;
+
+			const e = this.mountTrigger.dispatch();
+			e.promise.then( () => cb() ).catch( () => {});
+		}, 0 );
 	}
 
 
 	public unmount( cb: Function ): void {
+		clearTimeout( this.inTimeout );
 		this.isMounted = false;
 		this.mountTrigger.cancelAll();
-		const e = this.unmountTrigger.dispatch();
 
+		// cancel all in observers still running,
+		// that aren't managed by the mount trigger
+		this.lateInObserverCancelFuncs.forEach( c => c() );
+		this.lateInObserverCancelFuncs = [];
+
+		const e = this.unmountTrigger.dispatch();
 		e.promise.then( () => cb() ).catch( () => {});
 	}
 
@@ -46,8 +60,20 @@ export default class PresenceController {
 			unmountSub = this.unmountTrigger.subscribe( observer.out );
 		}
 
+
 		// run in function if observer is late to the party
-		if ( this.isMounted ) observer.in( () => {});
+		// and register callback cleanup function
+		if ( this.isMounted && observer.in ) {
+			let callbackRan = false;
+			const lateObserver = observer.in( () => {
+				const i = this.lateInObserverCancelFuncs.findIndex( f => f === lateObserver );
+				if ( i !== -1 ) this.lateInObserverCancelFuncs.splice( i, 1 );
+				callbackRan = true;
+			});
+			if ( !callbackRan ) {
+				this.lateInObserverCancelFuncs.push( lateObserver );
+			}
+		}
 
 		return (): void => {
 			if ( mountSub ) mountSub.unsubscribe();
