@@ -1,10 +1,12 @@
 import { EventDispatcher } from '@downpourdigital/dispatcher';
-import PassiveSubscription from '@downpourdigital/dispatcher/dist/cjs/lib/PassiveSubscription';
-import Subscription from '@downpourdigital/dispatcher/dist/cjs/lib/Subscription';
+import type PassiveSubscription from '@downpourdigital/dispatcher/dist/cjs/lib/PassiveSubscription';
+import type Subscription from '@downpourdigital/dispatcher/dist/cjs/lib/Subscription';
 
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 import noop from './noop';
 
+
+type Func = () => void;
 
 export default class PresenceController {
 	private mountTrigger = new EventDispatcher<void>({
@@ -15,13 +17,12 @@ export default class PresenceController {
 		mayCancelAfterCallback: false,
 	});
 
-	private lateInObserverCancelFuncs: ( () => void )[] = [];
+	private lateInObserverCancelFuncs: Func[] = [];
 	private inTimeout: number;
 
 	public isMounted = false;
 
-
-	public mount( cb: Function ): void {
+	public mount( cb: Func ): void {
 		this.unmountTrigger.cancelAll();
 
 		// wait for all observers to subscribe
@@ -33,23 +34,21 @@ export default class PresenceController {
 		}, 0 );
 	}
 
-
-	public unmount( cb: Function ): void {
+	public unmount( cb: Func ): void {
 		clearTimeout( this.inTimeout );
 		this.isMounted = false;
 		this.mountTrigger.cancelAll();
 
 		// cancel all in observers still running,
 		// that aren't managed by the mount trigger
-		this.lateInObserverCancelFuncs.forEach( c => c() );
+		this.lateInObserverCancelFuncs.forEach( ( c ) => c() );
 		this.lateInObserverCancelFuncs = [];
 
 		const e = this.unmountTrigger.dispatch();
 		e.promise.then( cb ).catch( noop );
 	}
 
-
-	public subscribe( observer: PresenceObserver ): () => void {
+	public subscribe( observer: PresenceObserver ): Func {
 		let mountSub: Subscription<void>;
 		let unmountSub: Subscription<void>;
 
@@ -97,9 +96,9 @@ export default class PresenceController {
 		};
 	}
 
-
-	public subscribePassive( observer: PassivePresenceObserver ): () => void {
+	public subscribePassive( observer: PassivePresenceObserver ): Func {
 		let unmountSub: PassiveSubscription<void>;
+
 		const inObserver = (): void => {
 			const outObserver = observer();
 
@@ -110,9 +109,7 @@ export default class PresenceController {
 			}
 
 			if ( outObserver ) {
-				unmountSub = this.unmountTrigger.subscribePassive( () => {
-					outObserver();
-				});
+				unmountSub = this.unmountTrigger.subscribePassive( outObserver );
 			}
 		};
 
