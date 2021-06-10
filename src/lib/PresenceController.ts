@@ -61,18 +61,33 @@ export default class PresenceController {
 			unmountSub = this.unmountTrigger.subscribe( observer.out );
 		}
 
-
 		// run in function if observer is late to the party
 		// and register callback cleanup function
 		if ( this.isMounted && observer.in ) {
 			let callbackRan = false;
+			let cancelFuncIsPushed = false;
+
 			const lateObserver = observer.in( () => {
-				const i = this.lateInObserverCancelFuncs.findIndex( f => f === lateObserver );
-				if ( i !== -1 ) this.lateInObserverCancelFuncs.splice( i, 1 );
+				// the callback may immediately run here.
+				// since it is referring to lateObserver before it is fully declared,
+				// we need to take some precautions
+				if ( cancelFuncIsPushed ) {
+					// only look for the cancelFunc, if it is listed.
+					// this won't be the case if the cb ran immediately
+					const i = this.lateInObserverCancelFuncs.findIndex(
+						( f ) => f === lateObserver,
+					);
+					if ( i !== -1 ) this.lateInObserverCancelFuncs.splice( i, 1 );
+				}
+
 				callbackRan = true;
 			});
+
 			if ( !callbackRan ) {
+				// if the callback already ran, the event can no longer be canceled,
+				// so there's no need to keep track of it
 				this.lateInObserverCancelFuncs.push( lateObserver );
+				cancelFuncIsPushed = true;
 			}
 		}
 

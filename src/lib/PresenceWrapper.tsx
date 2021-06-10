@@ -3,13 +3,12 @@ import React, {
 	useState,
 	useContext,
 	useEffect,
-	useRef,
 } from 'react';
 
+import useConstant from './useConstant';
 import PresenceController from './PresenceController';
 import PresenceContext from './PresenceContext';
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
-import useConstant from './useConstant';
 import noop from './noop';
 
 
@@ -17,36 +16,46 @@ interface PresenceWrapperProps {
 	visible: boolean;
 }
 
-
 const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 	children,
 	visible: localVisible,
 }) => {
 	const ctx = useContext( PresenceContext );
-	const parentVisible = useRef( ctx.visible );
 	const [mounted, setMounted] = useState( false );
 	const controller = useConstant( () => new PresenceController() );
 
-	const visible = localVisible && parentVisible.current;
+	const visible = localVisible && ctx.visible;
 
 	useEffect( () => {
 		if ( ctx.subscribe ) {
 			const unsubscribe = ctx.subscribe({
-				in: cb => {
-					parentVisible.current = true;
-					controller.mount( cb );
-					return (): void => {};
+				in: ( cb ) => {
+					if ( localVisible ) {
+						// both parent and local wrapper
+						// are visible
+						controller.mount( cb );
+					} else {
+						// the parent is visible
+						// but the local wrapper isn't
+						cb();
+
+						return noop;
+					}
+
+					return noop;
 				},
-				out: cb => {
-					parentVisible.current = false;
+				out: ( cb ) => {
 					controller.unmount( cb );
-					return (): void => {};
+
+					return noop;
 				},
 			});
+
 			return (): void => unsubscribe();
 		}
-		return (): void => {};
-	}, []);
+
+		return noop;
+	}, [localVisible]);
 
 	useEffect( () => {
 		if ( visible && !mounted ) {
