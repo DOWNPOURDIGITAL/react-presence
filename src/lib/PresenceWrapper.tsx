@@ -10,6 +10,7 @@ import PresenceController from './PresenceController';
 import PresenceContext from './PresenceContext';
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
 import useConstant from './useConstant';
+import noop from './noop';
 
 
 interface PresenceWrapperProps {
@@ -54,7 +55,7 @@ const PresenceWrapper: FunctionComponent<PresenceWrapperProps> = ({
 	}, [visible, mounted]);
 
 	if ( visible && !controller.isMounted && mounted ) {
-		controller.mount( () => {});
+		controller.mount( noop );
 	} else if ( !visible && controller.isMounted ) {
 		controller.unmount( () => setMounted( false ) );
 	}

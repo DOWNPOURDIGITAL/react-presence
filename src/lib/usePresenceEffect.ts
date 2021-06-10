@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 
 import PresenceContext from './PresenceContext';
 import { PassivePresenceObserver } from './PresenceObserver';
+import noop from './noop';
 
 
 export default function usePresenceEffect(
@@ -14,6 +15,6 @@ export default function usePresenceEffect(
 			const unsubscribe = ctx.subscribePassive( effect );
 			return (): void => unsubscribe();
 		}
-		return (): void => {};
+		return noop;
 	}, deps );
 }

@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 
 import PresenceObserver from './PresenceObserver';
 import PresenceContext from './PresenceContext';
+import noop from './noop';
 
 
 export default function usePresenceDelay(
@@ -12,8 +13,10 @@ export default function usePresenceDelay(
 	useEffect( () => {
 		if ( ctx.subscribe ) {
 			const unsubscribe = ctx.subscribe( factory() );
+
 			return (): void => unsubscribe();
 		}
-		return (): void => {};
+
+		return noop;
 	}, deps );
 }

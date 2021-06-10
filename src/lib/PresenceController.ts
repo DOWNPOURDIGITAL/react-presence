@@ -3,6 +3,7 @@ import PassiveSubscription from '@downpourdigital/dispatcher/dist/cjs/lib/Passiv
 import Subscription from '@downpourdigital/dispatcher/dist/cjs/lib/Subscription';
 
 import PresenceObserver, { PassivePresenceObserver } from './PresenceObserver';
+import noop from './noop';
 
 
 export default class PresenceController {
@@ -28,7 +29,7 @@ export default class PresenceController {
 			this.isMounted = true;
 
 			const e = this.mountTrigger.dispatch();
-			e.promise.then( () => cb() ).catch( () => {});
+			e.promise.then( cb ).catch( noop );
 		}, 0 );
 	}
 
@@ -44,7 +45,7 @@ export default class PresenceController {
 		this.lateInObserverCancelFuncs = [];
 
 		const e = this.unmountTrigger.dispatch();
-		e.promise.then( () => cb() ).catch( () => {});
+		e.promise.then( cb ).catch( noop );
 	}
 
 
