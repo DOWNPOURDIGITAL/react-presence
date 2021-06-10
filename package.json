@@ -1,6 +1,6 @@
 {
 	"name": "@downpourdigital/react-presence",
-	"version": "0.0.8",
+	"version": "0.1.0",
 	"description": "Callback based presence wrapper for (un)mount animations",
 	"sideEffects": false,
 	"main": "dist/cjs/index.js",
