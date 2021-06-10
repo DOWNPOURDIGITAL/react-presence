@@ -14,9 +14,9 @@ npm i @downpourdigital/react-presence
 
 ## Usage
 
-A `PresenceWrapper` represents the "top level" mounting point. It receives a `visible` prop, which determines whether the children should be visible or not. If this prop changes, the children's in/out hooks are called and the remain mounted in the tree until all callbacks have completed.
+A `PresenceWrapper` represents the "top level" mounting point. It receives a `visible` prop, which determines whether the children should be visible or not. If this prop changes, the children's in/out hooks are called and they remain mounted in the tree until all callbacks have completed.
 
-```typescript
+```tsx
 import React from "react";
 import { PresenceWrapper } from "@downpourdigital/react-presence";
 
@@ -27,7 +27,7 @@ const MyApp = ({ shouldShow }) => (
 );
 ```
 
-```typescript
+```tsx
 // ChildWithAnimation.tsx
 
 import React from "react";
@@ -67,7 +67,7 @@ const ChildWithAnimation = () => {
 };
 ```
 
-```typescript
+```tsx
 // ChildWithEffect.tsx
 
 import React from "react";
@@ -85,7 +85,7 @@ const ChildWithEffect = () => {
 };
 ```
 
-```typescript
+```tsx
 // ChildWithState.tsx
 
 import React from "react";
@@ -98,13 +98,13 @@ const ChildWithState = () => {
 };
 ```
 
-```typescript
+```tsx
 // ChildWithTransition.tsx
 
 import React from "react";
 import { usePresenceLate } from "@downpourdigital/react-presence";
 
-const ChildWithState = () => {
+const ChildWithTransition = () => {
 	// this will initally be false and only update
 	// after all styles have propagated,
 	// allowing for in/out animations with CSS transitions
