@@ -18,24 +18,19 @@ export default class PresenceController {
 	});
 
 	private lateInObserverCancelFuncs: Func[] = [];
-	private inTimeout: number;
 
 	public isMounted = false;
 
 	public mount( cb: Func ): void {
 		this.unmountTrigger.cancelAll();
 
-		// wait for all observers to subscribe
-		this.inTimeout = setTimeout( () => {
-			this.isMounted = true;
+		this.isMounted = true;
 
-			const e = this.mountTrigger.dispatch();
-			e.promise.then( cb ).catch( noop );
-		}, 0 );
+		const e = this.mountTrigger.dispatch();
+		e.promise.then( cb ).catch( noop );
 	}
 
 	public unmount( cb: Func ): void {
-		clearTimeout( this.inTimeout );
 		this.isMounted = false;
 		this.mountTrigger.cancelAll();
 
